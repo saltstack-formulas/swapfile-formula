@@ -1,5 +1,5 @@
 # Defaults can be overwritten, see swapfile/map.jinja for default values
 # swapfile:
 #   lookup:
-#     swapfile_path: '/usr/swap0',
-#     size: '2048',
+#     swapfile_path: '/usr/swap0'
+#     size: '2048'
