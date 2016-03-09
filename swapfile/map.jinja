@@ -1,12 +1,15 @@
-{% set swapfile = '/swapfile' %}
-{% set size = '1024' %}
+{% set defaults = {
+    'size' = '1024'
+    'swapfile_path' = '/swapfile'
+}, merge=salt['pillar.get']('swapfile:lookup') %}
+
 {% set conf = salt['grains.filter_by']({
-    'Debian':  {'swapfile': swapfile,
-                'name': 'fallocate -l '+size+'MB '+swapfile+' && chmod 0600 ' + swapfile + ' && mkswap '+swapfile,
-                'fstab': swapfile + ' none swap defaults 0 0',
+    'Debian':  {'swapfile': defaults.get('swapfile_path'),
+                'name': 'fallocate -l '+defaults.get('size')+'MB '+defaults.get('swapfile_path')+' && chmod 0600 ' + defaults.get('swapfile_path') + ' && mkswap '+defaults.get('swapfile_path'),
+                'fstab': defaults.get('swapfile_path') + ' none swap defaults 0 0',
                 },
-    'FreeBSD': {'swapfile': swapfile,
-                'name': 'dd if=/dev/zero of=' + swapfile + ' bs=1m count='+size+' && chmod 0600 ' + swapfile + ' && swapon -aL',
-                'fstab': 'md99 none  swap  sw,file='+swapfile+',late  0 0',
+    'FreeBSD': {'swapfile': defaults.get('swapfile_path'),
+                'name': 'dd if=/dev/zero of=' + defaults.get('swapfile_path') + ' bs=1m count='+defaults.get('size')+' && chmod 0600 ' + defaults.get('swapfile_path') + ' && swapon -aL',
+                'fstab': 'md99 none  swap  sw,file='+defaults.get('swapfile_path')+',late  0 0',
                 },
 }, grain='os_family', merge=salt['pillar.get']('swapfile:lookup')) %}
