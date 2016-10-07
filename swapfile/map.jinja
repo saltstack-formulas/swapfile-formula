@@ -1,5 +1,5 @@
 {% set settings = salt['grains.filter_by']({
-	'defaults': {'size': '1024', 'swapfile_path': '/swapfile'},
+    'defaults': {'size': '1024', 'swapfile_path': '/.swapfile'},
 }, merge=salt['pillar.get']('swapfile:lookup'), default='defaults') %}
 
 {% set conf = salt['grains.filter_by']({
